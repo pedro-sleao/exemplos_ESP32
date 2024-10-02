@@ -39,6 +39,6 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/pedro/Documentos/ESP32/led_blink/build/esp-idf/esp_system/port/cmake_install.cmake")
+  include("/home/pedro/Documentos/exemplos_ESP32/led_blink/build/esp-idf/esp_system/port/cmake_install.cmake")
 endif()
 
