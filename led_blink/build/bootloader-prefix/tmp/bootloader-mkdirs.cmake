@@ -5,18 +5,18 @@ cmake_minimum_required(VERSION 3.5)
 
 file(MAKE_DIRECTORY
   "/home/pedro/esp/esp-idf/components/bootloader/subproject"
-  "/home/pedro/Documentos/exemplos_ESP32/led_blink/build/bootloader"
-  "/home/pedro/Documentos/exemplos_ESP32/led_blink/build/bootloader-prefix"
-  "/home/pedro/Documentos/exemplos_ESP32/led_blink/build/bootloader-prefix/tmp"
-  "/home/pedro/Documentos/exemplos_ESP32/led_blink/build/bootloader-prefix/src/bootloader-stamp"
-  "/home/pedro/Documentos/exemplos_ESP32/led_blink/build/bootloader-prefix/src"
-  "/home/pedro/Documentos/exemplos_ESP32/led_blink/build/bootloader-prefix/src/bootloader-stamp"
+  "/home/pedro/exemplos_ESP32/led_blink/build/bootloader"
+  "/home/pedro/exemplos_ESP32/led_blink/build/bootloader-prefix"
+  "/home/pedro/exemplos_ESP32/led_blink/build/bootloader-prefix/tmp"
+  "/home/pedro/exemplos_ESP32/led_blink/build/bootloader-prefix/src/bootloader-stamp"
+  "/home/pedro/exemplos_ESP32/led_blink/build/bootloader-prefix/src"
+  "/home/pedro/exemplos_ESP32/led_blink/build/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "/home/pedro/Documentos/exemplos_ESP32/led_blink/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "/home/pedro/exemplos_ESP32/led_blink/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "/home/pedro/Documentos/exemplos_ESP32/led_blink/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "/home/pedro/exemplos_ESP32/led_blink/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()

@@ -1,4 +1,4 @@
-/* * Data converted from /home/pedro/Documentos/exemplos_ESP32/led_blink/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from /home/pedro/exemplos_ESP32/led_blink/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 .section .rodata.embedded

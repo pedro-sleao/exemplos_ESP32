@@ -1,4 +1,4 @@
-# Install script for directory: /home/pedro/Documentos/exemplos_ESP32/led_blink/main
+# Install script for directory: /home/pedro/exemplos_ESP32/led_blink/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
