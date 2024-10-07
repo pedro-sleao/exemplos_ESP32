@@ -1,2 +1,11 @@
-.build/
+**/build/
+
+# Ignora outros arquivos temporários ou de compilação
+*.o
+*.bin
+*.elf
+*.hex
+*.out
+
+# Ignora arquivos de IDE, se você estiver usando o Arduino IDE ou ESP-IDF, por exemplo
 .vscode/
