@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "led_blink",
-    "project_version":    "af2fc70-dirty",
+    "project_version":    "60e752f-dirty",
     "project_path":       "/home/pedro/exemplos_ESP32/led_blink",
     "idf_path":           "/home/pedro/esp/esp-idf",
     "build_dir":          "/home/pedro/exemplos_ESP32/led_blink/build",
