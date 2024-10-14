@@ -1,0 +1,19 @@
+menu "Wi-Fi Configuration"
+
+    config WIFI_SSID
+        string "Wi-Fi SSID"
+        help
+            Enter the SSID of the Wi-Fi network.
+
+    config WIFI_PASSWORD
+        string "Wi-Fi Password"
+        help
+            Enter the password for the Wi-Fi network.
+    
+    config WIFI_MAX_RETRY
+        int "Wi-Fi Max retry count"
+        default 5
+        help
+            Enter the maximum number of retry attempts the Wi-Fi driver will make 
+            when trying to reconnect to an access point.
+endmenu

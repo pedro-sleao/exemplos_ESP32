@@ -374,10 +374,15 @@ CONFIG_PARTITION_TABLE_MD5=y
 # OTA Configuration
 #
 CONFIG_FIRMWARE_UPGRADE_URL="https://192.168.0.3:8070/hello_world.bin"
-CONFIG_WIFI_SSID=""
-CONFIG_WIFI_PASSWORD=""
-CONFIG_WIFI_MAX_RETRY=5
 # end of OTA Configuration
+
+#
+# Wi-Fi Configuration
+#
+CONFIG_WIFI_SSID="Pedro R.a Fibra"
+CONFIG_WIFI_PASSWORD="pedro242"
+CONFIG_WIFI_MAX_RETRY=5
+# end of Wi-Fi Configuration
 
 #
 # Compiler options
