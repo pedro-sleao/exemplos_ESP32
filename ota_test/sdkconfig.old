@@ -373,7 +373,7 @@ CONFIG_PARTITION_TABLE_MD5=y
 #
 # OTA Configuration
 #
-CONFIG_FIRMWARE_UPGRADE_URL="http://192.168.1.9:8070/ota_test.bin"
+CONFIG_FIRMWARE_UPGRADE_URL="http://192.168.0.112:8070/ota_test.bin"
 # end of OTA Configuration
 
 #

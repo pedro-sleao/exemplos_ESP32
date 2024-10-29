@@ -74,7 +74,7 @@ static void mqtt_app_start(void)
 {
     const esp_mqtt_client_config_t mqtt_cfg = {
         .broker = {
-            .address.uri = "mqtt://192.168.0.112:1883",
+            .address.uri = "mqtt://broker.hivemq.com",
         },
     };
     esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);
