@@ -379,8 +379,8 @@ CONFIG_FIRMWARE_UPGRADE_URL="http://192.168.0.112:8070/ota_test.bin"
 #
 # Wi-Fi Configuration
 #
-CONFIG_WIFI_SSID="LAB.PDS"
-CONFIG_WIFI_PASSWORD="ufpe.lab.pds"
+CONFIG_WIFI_SSID="Pedro R.a Fibra"
+CONFIG_WIFI_PASSWORD="pedro242"
 CONFIG_WIFI_MAX_RETRY=5
 # end of Wi-Fi Configuration
 

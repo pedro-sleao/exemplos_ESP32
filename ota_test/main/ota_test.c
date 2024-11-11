@@ -1,7 +1,9 @@
 #include <stdio.h>
+#include <string.h>
 #include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/event_groups.h"
 #include "esp_system.h"
 #include "esp_event.h"
 #include "esp_log.h"
@@ -19,6 +21,9 @@ static const char *TAG = "ota_test";
 
 #define OTA_URL_SIZE 256
 #define LED 2
+#define MQTT_OTA_EVENT BIT0
+
+EventGroupHandle_t xEventGroup;
 
 static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data)
 {
@@ -29,7 +34,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     switch ((esp_mqtt_event_id_t)event_id) {
     case MQTT_EVENT_CONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-        msg_id = esp_mqtt_client_subscribe(client, "/topic/qos0", 0);
+        msg_id = esp_mqtt_client_subscribe(client, "firmware_update", 0);
         ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
         break;
     case MQTT_EVENT_DISCONNECTED:
@@ -51,6 +56,9 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         ESP_LOGI(TAG, "MQTT_EVENT_DATA");
         printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
         printf("DATA=%.*s\r\n", event->data_len, event->data);
+        if (strncmp(event->topic, "firmware_update", event->topic_len) == 0) {
+            xEventGroupSetBits(xEventGroup, MQTT_OTA_EVENT);
+        }
         break;
     case MQTT_EVENT_ERROR:
         ESP_LOGI(TAG, "MQTT_EVENT_ERROR");
@@ -74,7 +82,7 @@ static void mqtt_app_start(void)
 {
     const esp_mqtt_client_config_t mqtt_cfg = {
         .broker = {
-            .address.uri = "mqtt://192.168.1.9:1883",
+            .address.uri = "mqtt://192.168.0.112:1883",
         },
         .credentials = {
             .username = "usuario",
@@ -121,25 +129,29 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 
 void simple_ota_example_task(void *pvParameter)
 {
-    ESP_LOGI(TAG, "Starting OTA example task");
-    esp_http_client_config_t config = {
-        .url = CONFIG_FIRMWARE_UPGRADE_URL,
-        .event_handler = _http_event_handler,
-        .keep_alive_enable = true,
-    };
-
-    esp_https_ota_config_t ota_config = {
-        .http_config = &config,
-    };
-    ESP_LOGI(TAG, "Attempting to download update from %s", config.url);
-    esp_err_t ret = esp_https_ota(&ota_config);
-    if (ret == ESP_OK) {
-        ESP_LOGI(TAG, "OTA Succeed, Rebooting...");
-        esp_restart();
-    } else {
-        ESP_LOGE(TAG, "Firmware upgrade failed");
-    }
+    EventBits_t uxBits;
     while (1) {
+        uxBits = xEventGroupWaitBits(xEventGroup, MQTT_OTA_EVENT, pdTRUE, pdFALSE, portMAX_DELAY);
+        if (uxBits & MQTT_OTA_EVENT) {
+            ESP_LOGI(TAG, "Starting OTA example task");
+            esp_http_client_config_t config = {
+                .url = CONFIG_FIRMWARE_UPGRADE_URL,
+                .event_handler = _http_event_handler,
+                .keep_alive_enable = true,
+            };
+
+            esp_https_ota_config_t ota_config = {
+                .http_config = &config,
+            };
+            ESP_LOGI(TAG, "Attempting to download update from %s", config.url);
+            esp_err_t ret = esp_https_ota(&ota_config);
+            if (ret == ESP_OK) {
+                ESP_LOGI(TAG, "OTA Succeed, Rebooting...");
+                esp_restart();
+            } else {
+                ESP_LOGE(TAG, "Firmware upgrade failed");
+            }
+        }
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
@@ -176,12 +188,14 @@ void app_main(void)
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
+    xEventGroup = xEventGroupCreate();
+
     wifi_init_sta();
 
     esp_wifi_set_ps(WIFI_PS_NONE);
 
     mqtt_app_start();
 
-    //xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
+    xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
     xTaskCreate(task_LED, "LED", 2048, NULL, 5, NULL);
 }
