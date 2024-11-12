@@ -13,9 +13,11 @@
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "esp_wifi.h"
+#include "driver/adc.h"
 #include "mqtt_client.h"
 #include "sdkconfig.h"
 #include "wifi.h"
+#include "lm393.h"
 
 static const char *TAG = "ota_test";
 
@@ -170,6 +172,19 @@ void task_LED(void *param) {
     vTaskDelete(NULL);
 }
 
+void lm393_task(void *param) {
+    ESP_LOGI(TAG, "Solo Moisture Measurement Control Task: Starting");
+    int value;
+    esp_err_t res;
+    while(1){
+        ESP_LOGI(TAG, "Solo Moisture Measurement Control Task: Read Sensor");
+        res = lm393_read(&value);
+        printf("Solo Moisture Reading = %d \n", value);
+        ESP_LOGI(TAG, "Solo Moisture Measurement Control Task: Sleeping 2 seconds");
+        vTaskDelay((2000 / portTICK_PERIOD_MS));
+    }
+}
+
 void app_main(void)
 {
     ESP_LOGI(TAG, "OTA test app_main start");
@@ -190,6 +205,8 @@ void app_main(void)
 
     xEventGroup = xEventGroupCreate();
 
+    lm393_config(ADC_WIDTH_BIT_12, ADC_CHANNEL_0, ADC_ATTEN_DB_12);
+
     wifi_init_sta();
 
     esp_wifi_set_ps(WIFI_PS_NONE);
@@ -198,4 +215,5 @@ void app_main(void)
 
     xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
     xTaskCreate(task_LED, "LED", 2048, NULL, 5, NULL);
+    xTaskCreate(lm393_task, "lm393_task", 2048, NULL, 5, NULL);
 }
