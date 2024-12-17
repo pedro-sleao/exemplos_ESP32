@@ -234,17 +234,17 @@ void app_main(void)
     xEventGroup = xEventGroupCreate();
 
     //lm393_config(ADC_WIDTH_BIT_12, ADC_CHANNEL_0, ADC_ATTEN_DB_12);
-    tds_config(ADC_WIDTH_BIT_12, ADC_CHANNEL_0, ADC_ATTEN_DB_12);
+    //tds_config(ADC_WIDTH_BIT_12, ADC_CHANNEL_0, ADC_ATTEN_DB_12);
 
     wifi_init_sta();
 
-    esp_wifi_set_ps(WIFI_PS_NONE);
+    //esp_wifi_set_ps(WIFI_PS_NONE);
 
     mqtt_app_start();
 
     xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
-    xTaskCreate(task_LED, "LED", 2048, NULL, 5, NULL);
+    //xTaskCreate(task_LED, "LED", 2048, NULL, 5, NULL);
     //xTaskCreate(lm393_task, "lm393_task", 2048, NULL, 5, NULL);
     //xTaskCreate(turbidity_task, "turbidity_task", 2048, NULL, 5, NULL);
-    xTaskCreate(tds_task, "tds_task", 2048, NULL, 5, NULL);
+    //xTaskCreate(tds_task, "tds_task", 2048, NULL, 5, NULL);
 }
